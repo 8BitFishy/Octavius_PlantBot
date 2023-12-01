@@ -1,38 +1,50 @@
 import time
-import RPi.GPIO as GPIO
 import os
-
+try:
+    import RPi.GPIO as GPIO
+except:
+    print("GPIO module not installed")
 
 class RF_Manager:
     def __init__(self, binary_codes):
         self.binary_codes = binary_codes
         
-    def Code_Picker(self, devicelist, target, action, number=None):
-        
-        if target == "black" or target == "white" and number != None:
-            colour = target
-            plug = number
-            for i in range(len(self.binary_codes)):
-                if self.binary_codes[i][0] == colour and self.binary_codes[i][1] == plug and self.binary_codes[i][2] == action:
-                    print(f"Binary code - {self.binary_codes[i][3]}")
-                    self.transmit_code(self.binary_codes[i][3])
-        
-        elif target == 'all':
-            for i in range(len(self.binary_codes)):
-                if self.binary_codes[i][2] == action:
-                    self.transmit_code(self.binary_codes[i][3])
-                    #time.sleep(0.2)
+    def Code_Picker(self, target, action, devicelist=None, plug=None):
+        print(target)
+        print(plug)
+        print(action)
+        if len(self.binary_codes) == 0:
+            return 1
 
         else:
-            for i in range(len(devicelist)):
-                if devicelist[i][2] == target or devicelist[i][1] == target:
-                    colour = devicelist[i][0]
-                    plug = devicelist[i][1]
-                    for i in range(len(self.binary_codes)):
-                        if self.binary_codes[i][0] == colour and self.binary_codes[i][1] == plug and self.binary_codes[i][2] == action:
-                                    self.transmit_code(self.binary_codes[i][3])
-        
-        return
+            if target == "black" or target == "white" and plug != None:
+                colour = target
+                for i in range(len(self.binary_codes)):
+                    if self.binary_codes[i][0] == colour and self.binary_codes[i][1] == plug and self.binary_codes[i][2] == action:
+                        print(f"Binary code - {self.binary_codes[i][3]}")
+                        self.transmit_code(self.binary_codes[i][3])
+                        return 0
+                return 2
+
+            elif target == 'all':
+                for i in range(len(self.binary_codes)):
+                    if self.binary_codes[i][2] == action:
+                        self.transmit_code(self.binary_codes[i][3])
+                        #time.sleep(0.2)
+                return 0
+
+            elif devicelist is not None:
+                for i in range(len(devicelist)):
+                    if devicelist[i][2] == target or devicelist[i][1] == target:
+                        colour = devicelist[i][0]
+                        plug = devicelist[i][1]
+                        for i in range(len(self.binary_codes)):
+                            if self.binary_codes[i][0] == colour and self.binary_codes[i][1] == plug and self.binary_codes[i][2] == action:
+                                        self.transmit_code(self.binary_codes[i][3])
+                return 0
+
+
+        return 3
 
 
     def transmit_code(self, binary_code):
@@ -64,9 +76,9 @@ class RF_Manager:
 
 
         
-def Generate_Code_List():
+def Generate_Code_List(directory):
     binary_codes = []
-    dir = "RF_Binary_Codes/Plugs-"
+    dir = f"{directory}/RF_Binary_Codes/Plugs-"
 
     for i in range(2):
         if i == 0:
@@ -91,9 +103,9 @@ def Generate_Code_List():
 
     return binary_codes
 
-def Generate_Devicelist():   
+def Generate_Devicelist(directory):
     devicelist = []
-    dir = os.path.join("SystemLists/devicelist.txt")
+    dir = os.path.join(f"{directory}/SystemLists/devicelist.txt")
     with open(dir) as f:
         line = f.read().splitlines()
         for i in line:
@@ -108,8 +120,8 @@ def Generate_Devicelist():
     return devicelist
 
 
-def Generate_RF_Manager():
-    binary_codes = Generate_Code_List()
+def Generate_RF_Manager(directory):
+    binary_codes = Generate_Code_List(directory)
     RF_Man = RF_Manager(binary_codes)
     return RF_Man
     
@@ -137,6 +149,6 @@ if __name__ == '__main__':
             print(f"Action = {action}")
         except:
             pass
-        RF_Man.Code_Picker(devicelist, colour, action, number=plug)
+        RF_Man.Code_Picker(devicelist, colour, action, plug=plug)
         
         time.sleep(2)
