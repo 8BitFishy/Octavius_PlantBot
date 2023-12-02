@@ -15,7 +15,9 @@ class Command_Manager():
         telegram_manager.Send_Message(f"Updating files")
 
         try:
-            system(f"wget -P {self.directory} {self.git_repo}{"README.md"}")
+            system(f"wget -P {self.directory} {self.git_repo}README.md")
+            system(f"rm {self.directory}README.md1")
+
             for i in range(len(self.protected_files)):
                 system(f"rm {self.directory}{self.protected_files[i]}")
                 system(f"wget -P {self.directory} {self.git_repo}{self.protected_files[i]}")
