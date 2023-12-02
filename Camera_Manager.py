@@ -30,15 +30,18 @@ class Camera_Manager_Class:
         return image_file
     
     def Take_Video(self, length):
+        print(f"Recording {length} second video")
         self.videocount = self.videocount + 1
         video_file = f'{self.directory}Videos/video{self.videocount}.h264'
+        print(f"{video_file}")
         self.camera.start_recording(video_file)
         sleep(length)
         self.camera.stop_recording()
         command = f"MP4Box -add Videos/video{self.videocount}.h264 Videos/video{self.videocount}.mp4"
         output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-        os.remove(video_file)
+        #os.remove(video_file)
         video_file = f'{self.directory}Videos/video{self.videocount}.mp4'
+        print(f"New video file = {video_file}")
         return video_file
 
 def Generate_Camera_Manager(directory):
