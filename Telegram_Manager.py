@@ -75,6 +75,22 @@ class Message_Receiver:
 
         return False
 
+    def send_video(self, video_file):
+        files = {'video': open(video_file, 'rb')}
+        try:
+            print(ctime() + " - Sending video - " + video_file)
+            status = requests.post(self.URL + "sendVideo?chat_id=" + self.chatID, files=files)
+            return True
+
+        except Exception as e:
+            print(f"{ctime()} - Error sending video")
+            print(e)
+            self.Send_Message(f"Error sending message - {e.__class__.__name__}")
+
+        return False
+
+        return
+
 
     def Get_Response(self):
         self.text = ""
