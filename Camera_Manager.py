@@ -51,13 +51,13 @@ def Generate_Camera_Manager(directory):
             modifier = "Videos"
 
         if os.path.exists(f"{directory}{modifier}"):
-            print(f"directory exists - {directory}{modifier}")
+            #print(f"directory exists - {directory}{modifier}")
             for files in os.walk(f"{directory}{modifier}"):
                 filelist = list(files[2])
                 counts[i] = len(filelist)
 
         else:
-            print(f"Generating directory - {directory}{modifier}")
+            #print(f"Generating directory - {directory}{modifier}")
 
             os.mkdir(f"{directory}{modifier}")
 

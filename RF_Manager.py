@@ -101,7 +101,6 @@ def Generate_Code_List(directory):
                         
                         code.append(value)
                     binary_codes.append([plug.lower(), int(file[0]), file[2:5].rstrip('_').lower(), code])
-    print(binary_codes)
     return binary_codes
 
 def Generate_Devicelist(directory):
