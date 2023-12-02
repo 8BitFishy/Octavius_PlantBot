@@ -99,7 +99,7 @@ class PlantBot():
 
                 try:
                     print(f"{ctime()} - Accessing camera to record {command[1]} second video")
-                    video_file, E = self.camera_manager.Take_Video(command[1])
+                    video_file, output = self.camera_manager.Take_Video(command[1])
                     self.telegram_manager.Send_Image(video_file)
                     print(f"{ctime()} - Sending video")
 
