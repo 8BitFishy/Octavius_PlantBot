@@ -163,5 +163,13 @@ if __name__ == '__main__':
             sleep(10)
 
     print(f"{ctime()} - Initialisation Complete")
-    plantbot.telegram_manager.Send_Message("I am online...")
+    success = False
+
+    timeout = 0
+    while not success:
+        success = plantbot.telegram_manager.Send_Message("I am online...")
+        if timeout > 10:
+            success = True
+        timeout += 1
+
     plantbot.receiver_loop()
