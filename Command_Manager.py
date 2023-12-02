@@ -79,7 +79,7 @@ class Command_Manager():
         print(ctime() + " - Rebooting")
         telegram_manager.Send_Message("Rebooting")
         try:
-            system("sudo Reboot")
+            system("sudo reboot")
         except Exception as E:
             self.Handle_Error(E, telegram_manager)
         return
