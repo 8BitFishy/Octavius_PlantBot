@@ -88,10 +88,8 @@ class PlantBot():
 
 
         elif len(command) == 2:
-            if action == "PRINT" and command[1] != "files":
-                self.command_manager.Print_File_Contents(command, self.telegram_manager)
 
-            elif action == "PRINT" and command[1] == "files":
+            if action == "PRINT" and command[1] == "files":
                 self.command_manager.Print_Files(self.telegram_manager)
 
             elif action == "VIDEO" and isinstance(command[1], int):
@@ -99,7 +97,7 @@ class PlantBot():
                 try:
                     print(f"{ctime()} - Accessing camera to record {command[1]} second video")
                     video_file, output = self.camera_manager.Take_Video(command[1])
-                    self.telegram_manager.Send_(video_file)
+                    self.telegram_manager.Send_Video(video_file)
                     print(f"{ctime()} - Sending video")
 
                 except Exception as E:
@@ -108,7 +106,10 @@ class PlantBot():
 
         elif len(command) == 3:
 
-            if command[2].lower() == "on" or command[2].lower() == "off":
+            if action == "PRINT" and command[1] != "files":
+                self.command_manager.Print_File_Contents(command, self.telegram_manager)
+
+            elif command[2].lower() == "on" or command[2].lower() == "off":
                 print(ctime() + f" - Action - {command[0].lower()} {command[1]} {command[2]}")
                 self.telegram_manager.Send_Message(f"Turning plug {command[0].lower()} {command[1]} {command[2]}")
                 result = self.rf_manager.Code_Picker(target=str(command[0]).lower(), plug=command[1], action=command[2].lower())
