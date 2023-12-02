@@ -89,6 +89,10 @@ class PlantBot():
             elif action == "PRINT" and command[1] == "files":
                 self.command_manager.Print_Files(self.telegram_manager)
 
+            elif action == "VIDEO" and command[1].isnumeric():
+                video_file = self.camera_manager.Take_Video(command[1])
+                self.telegram_manager.Send_Image(video_file)
+
 
         elif len(command) == 3:
 

@@ -19,7 +19,7 @@ class Command_Manager():
                 system(f"rm {self.directory}{self.protected_files[i]}")
                 system(f"wget -P {self.directory} {self.git_repo}{self.protected_files[i]}")
 
-            return True
+            return True, None
 
         except Exception as E:
             return False, E
