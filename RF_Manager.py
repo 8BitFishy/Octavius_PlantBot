@@ -106,7 +106,7 @@ def Generate_Code_List(directory):
 
 def Generate_Devicelist(directory):
     devicelist = []
-    dir = os.path.join(f"{directory}/SystemLists/devicelist.txt")
+    dir = os.path.join(f"{directory}SystemLists/devicelist.txt")
     with open(dir) as f:
         line = f.read().splitlines()
         for i in line:

@@ -47,6 +47,14 @@ class PlantBot():
         command = msg.split()
         action = command[0].upper()
 
+        for i in range(len(command)):
+            if command[i].isnumeric():
+                try:
+                    command[i] = int(command[i])
+                except:
+                    command[i] = float(command[i])
+
+
         if len(command) == 1:
             if action == "HELLO":
                 self.telegram_manager.Send_Message("Hello, what can I do for you?")
@@ -69,6 +77,10 @@ class PlantBot():
             elif action == "DOWNLOAD":
                 self.command_manager.Download(command, self.telegram_manager)
 
+            elif action == "PHOTO" or action == "PIC":
+                image_file = self.camera_manager.Take_Picture()
+                self.telegram_manager.Send_Image(image_file)
+
 
         elif len(command) == 2:
             if action == "PRINT" and command[1] != "files":
@@ -83,7 +95,7 @@ class PlantBot():
             if command[2].lower() == "on" or command[2].lower() == "off":
                 print(ctime() + f" - Action - {command[0].lower()} {command[1]} {command[2]}")
                 self.telegram_manager.Send_Message(f"Turning plug {command[0].lower()} {command[1]} {command[2]}")
-                result = self.rf_manager.Code_Picker(target=str(command[0]).lower(), plug=int(command[1]), action=command[2].lower())
+                result = self.rf_manager.Code_Picker(target=str(command[0]).lower(), plug=command[1], action=command[2].lower())
 
                 if result == 0:
                     print(f"{ctime()} - Binary code transmitted")
@@ -105,12 +117,9 @@ class PlantBot():
 
 
 if __name__ == '__main__':
-    directory = __file__.rpartition("\\")[0]
-    print(f"Directory = {directory}-")
-
+    directory = __file__.rpartition("\\")[0] + "\\"
     #directory = __file__.strip("Octavius_Plantbot.py").strip(":")
-    print(f"Directory = {directory}-")
-    
+
     print(f"{ctime()} - Starting...")
     #sleep(10)
     print(f"{ctime()} - Initialising System")

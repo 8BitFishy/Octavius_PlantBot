@@ -16,7 +16,7 @@ class Command_Manager():
 
         try:
             for i in range(len(self.protected_files)):
-                system(f"rm {self.directory}/{self.protected_files[i]}")
+                system(f"rm {self.directory}{self.protected_files[i]}")
                 system(f"wget -P {self.directory} {self.git_repo}{self.protected_files[i]}")
 
             print(ctime() + " - Update Complete")
@@ -78,7 +78,7 @@ class Command_Manager():
             telegram_manager.Send_Message(f"Deleting {filename}")
 
             try:
-                remove(f'{self.directory}/{filename}')
+                remove(f'{self.directory}{filename}')
                 telegram_manager.Send_Message(f"{filename} deleted")
 
             except Exception as E:
@@ -114,11 +114,11 @@ class Command_Manager():
             file.close()
         if count > 0:
             print(ctime() + " - Action - Sending file: ")
-            print(f'{self.directory}/{filename}')
+            print(f'{self.directory}{filename}')
             telegram_manager.Send_Message(f"Accessing {filename}")
 
             try:
-                f = open(f'{self.directory}/{filename}')
+                f = open(f'{self.directory}{filename}')
                 if len(command) == 3:
                     for line in (f.readlines()[-int(command[2]):]):
                         telegram_manager.Send_Message(str(line).strip())
@@ -144,7 +144,7 @@ class Command_Manager():
             telegram_manager.Send_Message(f"Reading length of {filename}")
 
             try:
-                with open(f'{self.directory}/{filename}') as file:
+                with open(f'{self.directory}{filename}') as file:
                     count = sum(1 for _ in file)
                     telegram_manager.Send_Message(f"File is {count} lines long")
                     file.close()

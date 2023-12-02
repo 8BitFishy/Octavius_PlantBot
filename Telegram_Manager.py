@@ -57,7 +57,24 @@ class Message_Receiver:
         except Exception as e:
             print(f"{ctime()} - Error reaching URL, cannot send message")
             print(e)
-            return False
+
+        return False
+
+
+    def Send_Image(self, image_file):
+        files = {'photo': open(image_file, 'rb')}
+        try:
+            print(ctime() + " - Sending image - " + image_file)
+            status = requests.post(self.URL + "sendPhoto?chat_id=" + self.chat_id, files=files)
+            return True
+
+        except Exception as e:
+            print(f"{ctime()} - Error sending image")
+            print(e)
+            self.Send_Message(f"Error sending message - {e.__class__.__name__}")
+
+        return False
+
 
     def Get_Response(self):
         self.text = ""
