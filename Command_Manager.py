@@ -179,6 +179,6 @@ def Generate_Command_Manager(directory):
 if __name__ == '__main__':
     update = input("Update files?(y/n)")
     if update.lower() == "y":
-        directory = __file__.strip("Octavius_Plantbot.py").strip(":")
+        directory = __file__.strip("Command_Manager.py").strip(":")
         command_manager = Command_Manager(directory)
         command_manager.Download_and_Remove_Files()

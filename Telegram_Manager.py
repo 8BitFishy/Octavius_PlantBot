@@ -75,7 +75,7 @@ class Message_Receiver:
 
         return False
 
-    def send_video(self, video_file):
+    def Send_Video(self, video_file):
         files = {'video': open(video_file, 'rb')}
         try:
             print(ctime() + " - Sending video - " + video_file)
