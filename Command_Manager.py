@@ -13,7 +13,7 @@ class Command_Manager():
     def Download_and_Remove_Files(self):
         try:
             system(f"wget -P {self.directory} {self.git_repo}README.md")
-            system(f"mv -f {self.directory}README.md1 {self.directory}README.md")
+            system(f"mv -f {self.directory}README.md.1 {self.directory}README.md")
 
             for i in range(len(self.protected_files)):
                 system(f"rm {self.directory}{self.protected_files[i]}")

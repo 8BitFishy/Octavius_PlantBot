@@ -65,7 +65,7 @@ class Message_Receiver:
         files = {'photo': open(image_file, 'rb')}
         try:
             print(ctime() + " - Sending image - " + image_file)
-            status = requests.post(self.URL + "sendPhoto?chat_id=" + self.chat_id, files=files)
+            status = requests.post(self.URL + "sendPhoto?chat_id=" + self.chatID, files=files)
             return True
 
         except Exception as e:
