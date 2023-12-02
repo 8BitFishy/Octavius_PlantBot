@@ -58,7 +58,7 @@ class Camera_Manager_Class:
             self.camera.start_recording(video_file)
             sleep(length)
             self.camera.stop_recording()
-            command = f"MP4Box -add Videos/video{self.videocount}.h264 Videos/video{self.videocount}.mp4"
+            command = f"MP4Box -add {self.directory}Videos/video{self.videocount}.h264 {self.directory}Videos/video{self.videocount}.mp4"
             output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
             print(output)
             #os.remove(video_file)
