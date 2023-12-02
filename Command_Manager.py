@@ -15,6 +15,7 @@ class Command_Manager():
         telegram_manager.Send_Message(f"Updating files")
 
         try:
+            system(f"wget -P {self.directory} {self.git_repo}{"README.md"}")
             for i in range(len(self.protected_files)):
                 system(f"rm {self.directory}{self.protected_files[i]}")
                 system(f"wget -P {self.directory} {self.git_repo}{self.protected_files[i]}")
@@ -66,7 +67,7 @@ class Command_Manager():
         print(ctime() + " - Rebooting")
         telegram_manager.Send_Message("Rebooting")
         try:
-            system("sudo reboot")
+            system("sudo Reboot")
         except Exception as E:
             self.Handle_Error(E, telegram_manager)
         return
