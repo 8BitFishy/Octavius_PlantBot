@@ -5,7 +5,6 @@ import Command_Manager
 from platform import system
 from time import ctime, sleep
 
-
 class InitialisationError(Exception):
     pass
 
@@ -132,7 +131,6 @@ class PlantBot():
             self.telegram_manager.Send_Message("Command not recognised")
 
 
-
 if __name__ == '__main__':
 
     if system() == "Windows":
@@ -158,7 +156,6 @@ if __name__ == '__main__':
             print(e)
             print(f"{ctime()} - Re-trying in 10 seconds")
             sleep(10)
-
 
     print(f"{ctime()} - Initialisation Complete")
     plantbot.telegram_manager.Send_Message("I am online...")

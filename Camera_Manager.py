@@ -11,14 +11,14 @@ import subprocess
 class Camera_Manager_Class:
 
     def __init__(self, rotation, imagecount, videocount, directory):
+        self.rotation = rotation
         try:
-            self.Initialise_Camera(rotation)
+            self.Initialise_Camera()
         except:
             print("Camera module not installed")
             self.camera = None
             #self.camera.rotation = None
 
-        self.rotation = rotation
         self.imagecount = imagecount
         self.videocount = videocount
         self.directory = directory
