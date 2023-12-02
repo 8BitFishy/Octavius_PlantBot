@@ -42,7 +42,7 @@ class Camera_Manager_Class:
         #os.remove(video_file)
         video_file = f'{self.directory}Videos/video{self.videocount}.mp4'
         print(f"New video file = {video_file}")
-        return video_file
+        return video_file, output
 
 def Generate_Camera_Manager(directory):
     counts = [0, 0]

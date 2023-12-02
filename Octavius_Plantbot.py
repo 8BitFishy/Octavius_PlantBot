@@ -78,8 +78,14 @@ class PlantBot():
                 self.command_manager.Download(command, self.telegram_manager)
 
             elif action == "PHOTO" or action == "PIC":
-                image_file = self.camera_manager.Take_Picture()
-                self.telegram_manager.Send_Image(image_file)
+                try:
+                    print(f"{ctime()} - Accessing camera to take picture")
+                    image_file = self.camera_manager.Take_Picture()
+                    self.telegram_manager.Send_Image(image_file)
+                    print(f"{ctime()} - Sending picture")
+
+                except Exception as E:
+                    self.command_manager.Handle_Error(E, self.telegram_manager)
 
 
         elif len(command) == 2:
@@ -89,9 +95,16 @@ class PlantBot():
             elif action == "PRINT" and command[1] == "files":
                 self.command_manager.Print_Files(self.telegram_manager)
 
-            elif action == "VIDEO" and command[1].isnumeric():
-                video_file = self.camera_manager.Take_Video(command[1])
-                self.telegram_manager.Send_Image(video_file)
+            elif action == "VIDEO" and isinstance(command[1], int):
+
+                try:
+                    print(f"{ctime()} - Accessing camera to record {command[1]} second video")
+                    video_file, E = self.camera_manager.Take_Video(command[1])
+                    self.telegram_manager.Send_Image(video_file)
+                    print(f"{ctime()} - Sending video")
+
+                except Exception as E:
+                    self.command_manager.Handle_Error(E, self.telegram_manager)
 
 
         elif len(command) == 3:
