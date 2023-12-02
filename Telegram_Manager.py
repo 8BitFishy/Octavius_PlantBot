@@ -89,7 +89,6 @@ class Message_Receiver:
 
         return False
 
-        return
 
 
     def Get_Response(self):
