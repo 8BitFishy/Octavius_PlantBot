@@ -10,24 +10,34 @@ class Command_Manager():
         self.git_repo = 'https://raw.githubusercontent.com/8BitFishy/Octavius_PlantBot/main/'
 
 
-    def Update(self, telegram_manager):
-        print(ctime() + " - Action - Update")
-        telegram_manager.Send_Message(f"Updating files")
-
+    def Download_and_Remove_Files(self):
         try:
             system(f"wget -P {self.directory} {self.git_repo}README.md")
-            system(f"rm {self.directory}README.md1")
+            system(f"mv -f {self.directory}README.md1 {self.directory}README.md")
 
             for i in range(len(self.protected_files)):
                 system(f"rm {self.directory}{self.protected_files[i]}")
                 system(f"wget -P {self.directory} {self.git_repo}{self.protected_files[i]}")
 
+            return True
+
+        except Exception as E:
+            return False, E
+
+    def Update(self, telegram_manager):
+        print(ctime() + " - Action - Update")
+        telegram_manager.Send_Message(f"Updating files")
+        success, E = self.Download_and_Remove_Files()
+        if success:
             print(ctime() + " - Update Complete")
             telegram_manager.Send_Message(f"Update complete, Rebooting")
             self.Reboot(telegram_manager)
 
-        except Exception as E:
+        else:
             self.Handle_Error(E, telegram_manager)
+
+
+
 
 
     def Download(self, command, telegram_manager):
@@ -164,3 +174,11 @@ class Command_Manager():
 def Generate_Command_Manager(directory):
     command_manager = Command_Manager(directory)
     return command_manager
+
+
+if __name__ == '__main__':
+    update = input("Update files?(y/n)")
+    if update.lower() == "y":
+        directory = __file__.strip("Octavius_Plantbot.py").strip(":")
+        command_manager = Command_Manager(directory)
+        command_manager.Download_and_Remove_Files()
