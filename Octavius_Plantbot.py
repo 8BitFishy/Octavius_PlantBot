@@ -2,7 +2,7 @@ import Camera_Manager
 import RF_Manager
 import Telegram_Manager
 import Command_Manager
-
+from platform import system
 from time import ctime, sleep
 
 
@@ -117,8 +117,11 @@ class PlantBot():
 
 
 if __name__ == '__main__':
-    directory = __file__.rpartition("\\")[0] + "\\"
-    #directory = __file__.strip("Octavius_Plantbot.py").strip(":")
+
+    if system() == "Windows":
+        directory = __file__.rpartition("\\")[0] + "\\"
+    elif system() == "Linux":
+        directory = __file__.strip("Octavius_Plantbot.py").strip(":")
 
     print(f"{ctime()} - Starting...")
     #sleep(10)

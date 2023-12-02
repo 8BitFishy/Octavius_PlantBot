@@ -7,7 +7,7 @@ class Command_Manager():
     def __init__(self, directory):
         self.directory = directory
         self.protected_files = ['Octavius_Plantbot.py', 'Telegram_Manager.py', 'Camera_Manager.py', 'RF_Manager.py', 'Command_Manager.py']
-        self.git_repo = 'https://raw.githubusercontent.com/8BitFishy/Octavius_PlantBot/deployed/'
+        self.git_repo = 'https://raw.githubusercontent.com/8BitFishy/Octavius_PlantBot/main/'
 
 
     def Update(self, telegram_manager):
@@ -66,7 +66,7 @@ class Command_Manager():
         print(ctime() + " - Rebooting")
         telegram_manager.Send_Message("Rebooting")
         try:
-            system("sudo Reboot")
+            system("sudo reboot")
         except Exception as E:
             self.Handle_Error(E, telegram_manager)
         return
