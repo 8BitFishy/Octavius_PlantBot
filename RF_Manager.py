@@ -10,6 +10,7 @@ class RF_Manager:
         self.binary_codes = binary_codes
         
     def Code_Picker(self, target, action, devicelist=None, plug=None):
+        print(f"Searching or codes")
         print(target)
         print(plug)
         print(action)
@@ -78,7 +79,7 @@ class RF_Manager:
         
 def Generate_Code_List(directory):
     binary_codes = []
-    dir = f"{directory}/RF_Binary_Codes/Plugs-"
+    dir = f"{directory}RF_Binary_Codes/Plugs-"
 
     for i in range(2):
         if i == 0:
@@ -100,7 +101,7 @@ def Generate_Code_List(directory):
                         
                         code.append(value)
                     binary_codes.append([plug.lower(), int(file[0]), file[2:5].rstrip('_').lower(), code])
-
+    print(binary_codes)
     return binary_codes
 
 def Generate_Devicelist(directory):

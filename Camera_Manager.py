@@ -46,17 +46,20 @@ def Generate_Camera_Manager(directory):
 
     for i in range(2):
         if i == 0:
-            modifier = "/Images"
+            modifier = "Images"
         else:
-            modifier = "/Videos"
+            modifier = "Videos"
 
         if os.path.exists(f"{directory}{modifier}"):
+            print(f"directory exists - {directory}{modifier}")
             for files in os.walk(f"{directory}{modifier}"):
                 filelist = list(files[2])
                 counts[i] = len(filelist)
 
         else:
-            os.makedirs(f"{directory}{modifier}")
+            print(f"Generating directory - {directory}{modifier}")
+
+            os.mkdir(f"{directory}{modifier}")
 
     Octavius_Camera_Manager = Camera_Manager_Class(180, counts[0], counts[1], directory)
 

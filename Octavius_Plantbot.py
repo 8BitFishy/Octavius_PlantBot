@@ -83,7 +83,7 @@ class PlantBot():
             if command[2].lower() == "on" or command[2].lower() == "off":
                 print(ctime() + f" - Action - {command[0].lower()} {command[1]} {command[2]}")
                 self.telegram_manager.Send_Message(f"Turning plug {command[0].lower()} {command[1]} {command[2]}")
-                result = self.rf_manager.Code_Picker(target=str(command[0]).lower(), plug=command[1], action=command[2].lower())
+                result = self.rf_manager.Code_Picker(target=str(command[0]).lower(), plug=int(command[1]), action=command[2].lower())
 
                 if result == 0:
                     print(f"{ctime()} - Binary code transmitted")
@@ -106,7 +106,11 @@ class PlantBot():
 
 if __name__ == '__main__':
     directory = __file__.rpartition("\\")[0]
+    print(f"Directory = {directory}-")
 
+    #directory = __file__.strip("Octavius_Plantbot.py").strip(":")
+    print(f"Directory = {directory}-")
+    
     print(f"{ctime()} - Starting...")
     #sleep(10)
     print(f"{ctime()} - Initialising System")

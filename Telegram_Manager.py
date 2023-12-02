@@ -14,7 +14,7 @@ class Message_Receiver:
 
     def Get_Tokens(self, directory):
         filename = 'telegramID.txt'
-        with open(f'{directory}/apis/{filename}') as f:
+        with open(f'{directory}apis/{filename}') as f:
             IDS = f.read().splitlines()
         chat_id = str(IDS[0])
         TOKEN = str(IDS[1])
