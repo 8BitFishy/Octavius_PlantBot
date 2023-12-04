@@ -11,6 +11,7 @@ class Plant_Manager():
     def __init__(self, directory):
         self.directory = directory
         self.watering_diary = "Watering_Diary.txt"
+        self.watering_interval = 1
 
 
     def Water_Plants(self, rf_manager, duration=10):
@@ -84,10 +85,12 @@ class Plant_Manager():
             else:
                 return E
 
+        else:
+            return None
 
     def Update_Diary(self, duration):
         with open(f"{self.directory}{self.watering_diary}", "a") as file:
-            file.write(f"\n{str(datetime.now()).split('.')[0]} - {duration} seconds")
+            file.write(f"{str(datetime.now()).split('.')[0]} - {duration} seconds\n")
             file.close()
         return
 
@@ -105,7 +108,7 @@ class Plant_Manager():
                     data = line.split(" - ")
                     last_water = data[0]
                 file.close()
-                return last_water
+            return last_water
 
         except FileNotFoundError:
             pass
@@ -118,7 +121,7 @@ class Plant_Manager():
             return True, 0
         else:
             days_since_last_water = current_date - last_water
-            if days_since_last_water >= 7:
+            if days_since_last_water >= self.watering_interval:
                 return True, 0
 
             else:
