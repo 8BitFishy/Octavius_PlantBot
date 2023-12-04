@@ -102,6 +102,11 @@ class PlantBot():
                     if E is not None:
                         self.command_manager.Handle_Error(E, self.telegram_manager)
 
+                elif action == "LAST" and command[1] == "water":
+                    last_water, _ = self.plant_manager.Check_Diary()
+                    self.telegram_manager.Send_Message(f"Last water was on {last_water}")
+
+
             elif len(command) == 3:
 
                 if action == "PRINT" and command[1] != "files":

@@ -18,6 +18,7 @@ class Plant_Manager():
 
         try:
             result = rf_manager.Code_Picker(target="white", plug=1, action="off")
+            sleep(2)
 
             if result != 0:
                 raise RFException
@@ -64,8 +65,10 @@ class Plant_Manager():
 
 
     def Water_Schedule(self, rf_manager, telegram_manager):
+        last_water, current_date = self.Check_Diary()
+        water_required, _ = self.Check_Date(last_water, current_date)
 
-        if self.Check_Diary():
+        if water_required:
             print(f"{str(datetime.now()).split('.')[0]} - Scheduled plant watering cycle initiated")
             success, E = self.Water_Plants(rf_manager)
 
@@ -80,10 +83,9 @@ class Plant_Manager():
 
     def Update_Diary(self, duration):
         with open(f"{self.directory}{self.watering_diary}", "a") as file:
-            file.write(f"{str(datetime.now()).split('.')[0]} - {duration} seconds")
+            file.write(f"\n{str(datetime.now()).split('.')[0]} - {duration} seconds")
             file.close()
         return
-
 
 
     def Check_Diary(self):
@@ -95,12 +97,16 @@ class Plant_Manager():
 
         last_water = date(int(last_water.split("-")[0]), int(last_water.split("-")[1]), int(last_water.split("-")[2]))
         current_date = date(datetime.now().year, datetime.now().month, datetime.now().day)
+        return last_water, current_date
 
-        if current_date - last_water >= 7:
-            return True
+
+    def Check_Date(self, current_date, last_water):
+        days_since_last_water = current_date - last_water
+        if days_since_last_water >= 7:
+            return True, 0
 
         else:
-            return False
+            return False, days_since_last_water
 
 
 
