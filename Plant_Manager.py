@@ -65,7 +65,11 @@ class Plant_Manager():
 
 
     def Water_Schedule(self, rf_manager, telegram_manager):
-        last_water, current_date = self.Check_Diary()
+
+        last_water = self.Check_Diary()
+
+        last_water, current_date = self.Get_Last_Water_And_Current_Date(last_water)
+
         water_required, _ = self.Check_Date(last_water, current_date)
 
         if water_required:
@@ -87,6 +91,12 @@ class Plant_Manager():
             file.close()
         return
 
+    def Get_Last_Water_And_Current_Date(self, last_water):
+        last_water = last_water.split(" ")[0]
+        last_water = date(int(last_water.split("-")[0]), int(last_water.split("-")[1]), int(last_water.split("-")[2]))
+        current_date = date(datetime.now().year, datetime.now().month, datetime.now().day)
+        return last_water, current_date
+
 
     def Check_Diary(self):
         try:
@@ -95,14 +105,12 @@ class Plant_Manager():
                     data = line.split(" - ")
                     last_water = data[0]
                 file.close()
-
-            last_water = date(int(last_water.split("-")[0]), int(last_water.split("-")[1]), int(last_water.split("-")[2]))
+                return last_water
 
         except FileNotFoundError:
-            last_water = None
+            pass
 
-        current_date = date(datetime.now().year, datetime.now().month, datetime.now().day)
-        return last_water, current_date
+        return None
 
 
     def Check_Date(self, current_date, last_water):
