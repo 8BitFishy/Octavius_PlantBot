@@ -16,6 +16,7 @@ class PlantBot():
         self.camera_manager = Camera_Manager.Generate_Camera_Manager(directory)
         self.command_manager = Command_Manager.Generate_Command_Manager(directory)
 
+
     def life_sign(self):
 
         if plantbot.telegram_manager == None:
@@ -136,17 +137,23 @@ class PlantBot():
             self.telegram_manager.Send_Message("Command not recognised")
 
 
+
 if __name__ == '__main__':
 
-    if system() == "Windows":
-        directory = __file__.rpartition("\\")[0] + "\\"
-    elif system() == "Linux":
+    if system() == "Linux":
         directory = __file__.strip("Octavius_Plantbot.py").strip(":")
+        sleep(10)
+
+    else:
+        directory = __file__.rpartition("\\")[0] + "\\"
 
     print(f"{ctime()} - Starting...")
-    #sleep(10)
     print(f"{ctime()} - Initialising System")
     life_sign = False
+    success = False
+    timeout = 0
+
+    plantbot = None
 
     while not life_sign:
 
@@ -163,9 +170,7 @@ if __name__ == '__main__':
             sleep(10)
 
     print(f"{ctime()} - Initialisation Complete")
-    success = False
 
-    timeout = 0
     while not success:
         success = plantbot.telegram_manager.Send_Message("I am online...")
         if timeout > 10:

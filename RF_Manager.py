@@ -8,7 +8,8 @@ except:
 class RF_Manager:
     def __init__(self, binary_codes):
         self.binary_codes = binary_codes
-        
+
+
     def Code_Picker(self, target, action, devicelist=None, plug=None):
         print(f"Searching or codes")
         print(target)
@@ -102,6 +103,7 @@ def Generate_Code_List(directory):
                         code.append(value)
                     binary_codes.append([plug.lower(), int(file[0]), file[2:5].rstrip('_').lower(), code])
     return binary_codes
+
 
 def Generate_Devicelist(directory):
     devicelist = []

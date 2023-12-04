@@ -10,6 +10,7 @@ class Command_Manager():
         self.git_repo = 'https://raw.githubusercontent.com/8BitFishy/Octavius_PlantBot/main/'
 
 
+
     def Download_and_Remove_Files(self):
         try:
             system(f"wget -P {self.directory} {self.git_repo}README.md")
@@ -24,6 +25,7 @@ class Command_Manager():
         except Exception as E:
             return False, E
 
+
     def Update(self, telegram_manager):
         print(ctime() + " - Action - Update")
         telegram_manager.Send_Message(f"Updating files")
@@ -35,9 +37,6 @@ class Command_Manager():
 
         else:
             self.Handle_Error(E, telegram_manager)
-
-
-
 
 
     def Download(self, command, telegram_manager):
@@ -54,11 +53,13 @@ class Command_Manager():
 
         return
 
+
     def Handle_Error(self, E, telegram_manager):
         telegram_manager.Send_Message("Action failed - " + E.__class__.__name__)
         print(ctime() + " - failed with exception:")
         print(E)
         return
+
 
     def Talk(self, telegram_manager):
         telegram_manager.Send_Message("I am active. My current commands are: ")
@@ -75,6 +76,7 @@ class Command_Manager():
         telegram_manager.Send_Message("Delete (filename)")
         return
 
+
     def Reboot(self, telegram_manager):
         print(ctime() + " - Rebooting")
         telegram_manager.Send_Message("Rebooting")
@@ -83,6 +85,7 @@ class Command_Manager():
         except Exception as E:
             self.Handle_Error(E, telegram_manager)
         return
+
 
     def Delete(self, command, telegram_manager):
         filename = str(command[1])
@@ -119,7 +122,6 @@ class Command_Manager():
             self.Handle_Error(E, telegram_manager)
 
 
-
     def Print_File_Contents(self, command, telegram_manager):
         filename = str(command[1])
         with open(f'{self.directory}/{filename}') as file:
@@ -148,7 +150,6 @@ class Command_Manager():
 
         else:
             telegram_manager.Send_Message(f"{filename} is currently empty")
-
 
 
     def File_Length(self, command, telegram_manager):

@@ -23,9 +23,11 @@ class Camera_Manager_Class:
         self.videocount = videocount
         self.directory = directory
 
+
     def Initialise_Camera(self):
         self.camera = PiCamera()
         self.camera.rotation = self.rotation
+
 
     def Check_Camera(self):
         if self.camera is None:
@@ -67,6 +69,7 @@ class Camera_Manager_Class:
             return video_file, output
         else:
             return None, None
+
 
 def Generate_Camera_Manager(directory):
     counts = [0, 0]
