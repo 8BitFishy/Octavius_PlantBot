@@ -7,14 +7,17 @@ from os.path import isfile, join
 class Command_Manager():
     def __init__(self, directory):
         self.directory = directory
-        self.protected_files = ['Octavius_Plantbot.py', 'Telegram_Manager.py', 'Camera_Manager.py', 'RF_Manager.py', 'Command_Manager.py']
+        self.protected_files = ['Octavius_Plantbot.py', 'Telegram_Manager.py', 'Camera_Manager.py', 'RF_Manager.py', 'Plant_Manager.py', 'Command_Manager.py']
         self.git_repo = 'https://raw.githubusercontent.com/8BitFishy/Octavius_PlantBot/main/'
 
+
+    def Download_File(self, filename):
+        system(f"wget -P {self.directory} {self.git_repo}{filename}")
 
 
     def Download_and_Remove_Files(self):
         try:
-            system(f"wget -P {self.directory} {self.git_repo}README.md")
+            self.Download_File("README.md")
             system(f"mv -f {self.directory}README.md.1 {self.directory}README.md")
 
             for i in range(len(self.protected_files)):
@@ -46,7 +49,7 @@ class Command_Manager():
         try:
             print(str(datetime.now()).split('.')[0] + f" - Action - Download {filename}")
             telegram_manager.Send_Message(f"Downloading {filename} from my repo")
-            system(f"wget -P {self.directory} {self.git_repo}{filename}")
+            self.Download_File(filename)
             telegram_manager.Send_Message(f"{filename} downloaded")
 
         except Exception as E:
@@ -228,8 +231,16 @@ def Generate_Command_Manager(directory):
 
 
 if __name__ == '__main__':
-    update = input("Update files?(y/n)")
-    if update.lower() == "y":
-        directory = __file__.strip("Command_Manager.py").strip(":")
-        command_manager = Command_Manager(directory)
+
+    directory = __file__.strip("Command_Manager.py").strip(":")
+
+    command_manager = Command_Manager(directory)
+
+    update = input(f"Download file - 1\nUpdate Files - 2\n")
+
+    if int(update) == 1:
+        command_manager.Download(input("Enter the name of the file to download:\n"))
+
+
+    elif int(update) == 2:
         command_manager.Download_and_Remove_Files()
