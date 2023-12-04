@@ -76,9 +76,8 @@ class PlantBot():
                 elif action == "UPDATE":
                     self.command_manager.Update(self.telegram_manager)
 
-
                 elif action == "PHOTO" or action == "PIC" or action == "PICTURE":
-                    self.command_manager.Take_Picture(self.command_manager, self.telegram_manager)
+                    self.command_manager.Take_Picture(self.camera_manager, self.telegram_manager)
 
 
             elif len(command) == 2:
