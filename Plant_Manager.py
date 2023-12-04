@@ -89,24 +89,32 @@ class Plant_Manager():
 
 
     def Check_Diary(self):
-        with open(f"{self.directory}{self.watering_diary}", "r") as file:
-            for line in (file.readlines()[-int(1):]):
-                data = line.split(" - ")
-                last_water = data[0]
-            file.close()
+        try:
+            with open(f"{self.directory}{self.watering_diary}", "r") as file:
+                for line in (file.readlines()[-int(1):]):
+                    data = line.split(" - ")
+                    last_water = data[0]
+                file.close()
 
-        last_water = date(int(last_water.split("-")[0]), int(last_water.split("-")[1]), int(last_water.split("-")[2]))
+            last_water = date(int(last_water.split("-")[0]), int(last_water.split("-")[1]), int(last_water.split("-")[2]))
+
+        except FileNotFoundError:
+            last_water = None
+
         current_date = date(datetime.now().year, datetime.now().month, datetime.now().day)
         return last_water, current_date
 
 
     def Check_Date(self, current_date, last_water):
-        days_since_last_water = current_date - last_water
-        if days_since_last_water >= 7:
+        if last_water is None:
             return True, 0
-
         else:
-            return False, days_since_last_water
+            days_since_last_water = current_date - last_water
+            if days_since_last_water >= 7:
+                return True, 0
+
+            else:
+                return False, days_since_last_water
 
 
 
