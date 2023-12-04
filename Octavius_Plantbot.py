@@ -18,7 +18,7 @@ class PlantBot():
         self.rf_manager = RF_Manager.Generate_RF_Manager(directory)
         self.camera_manager = Camera_Manager.Generate_Camera_Manager(directory)
         self.command_manager = Command_Manager.Generate_Command_Manager(directory)
-        self.plant_manager = Plant_Manager.(directory)
+        self.plant_manager = Plant_Manager.Generate_Plant_Manager(directory)
 
 
     def life_sign(self):
