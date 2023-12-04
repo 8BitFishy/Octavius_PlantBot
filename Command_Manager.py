@@ -21,8 +21,8 @@ class Command_Manager():
             system(f"mv -f {self.directory}README.md.1 {self.directory}README.md")
 
             for i in range(len(self.protected_files)):
-                system(f"rm {self.directory}{self.protected_files[i]}")
-                system(f"wget -P {self.directory} {self.git_repo}{self.protected_files[i]}")
+                self.Download_File(self.protected_files[i])
+                system(f"mv -f {self.directory}{self.protected_files[i]}.1 {self.directory}{self.protected_files[i]}")
 
             return True, None
 
