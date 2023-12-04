@@ -22,8 +22,10 @@ class Command_Manager():
 
             for i in range(len(self.protected_files)):
                 self.Download_File(self.protected_files[i])
-                system(f"mv -f {self.directory}{self.protected_files[i]}.1 {self.directory}{self.protected_files[i]}")
-
+                try:
+                    system(f"mv -f {self.directory}{self.protected_files[i]}.1 {self.directory}{self.protected_files[i]}")
+                except:
+                    pass
             return True, None
 
         except Exception as E:
@@ -239,7 +241,7 @@ if __name__ == '__main__':
     update = input(f"Download file - 1\nUpdate Files - 2\n")
 
     if int(update) == 1:
-        command_manager.Download(input("Enter the name of the file to download:\n"))
+        command_manager.Download_File(input("Enter the name of the file to download:\n"))
 
 
     elif int(update) == 2:
