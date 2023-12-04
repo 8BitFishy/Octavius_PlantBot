@@ -11,6 +11,7 @@ class Plant_Manager():
     def __init__(self, directory):
         self.directory = directory
         self.watering_diary = "Watering_Diary.txt"
+        self.watering_interval = 1
 
 
     def Water_Plants(self, rf_manager, duration=10):
@@ -120,11 +121,11 @@ class Plant_Manager():
             return True, 0
         else:
             days_since_last_water = current_date - last_water
-            if days_since_last_water >= 1:
+            if days_since_last_water.days >= self.watering_interval:
                 return True, 0
 
             else:
-                return False, days_since_last_water
+                return False, days_since_last_water.days
 
 
 
