@@ -108,6 +108,9 @@ class PlantBot():
                     last_water = self.plant_manager.Check_Diary()
                     self.telegram_manager.Send_Message(f"Last water date - {last_water}")
 
+                elif action == "PRINT" and command[1] != "files":
+                    self.command_manager.Print_File_Contents(command, self.telegram_manager)
+
 
             elif len(command) == 3:
 
