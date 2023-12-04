@@ -73,17 +73,9 @@ class PlantBot():
                 elif action == "REBOOT":
                     self.command_manager.Reboot(self.telegram_manager)
 
-                elif action == "DELETE":
-                    self.command_manager.Delete(command, self.telegram_manager)
-
-                elif action == "LENGTH":
-                    self.command_manager.File_Length(command, self.telegram_manager)
-
                 elif action == "UPDATE":
                     self.command_manager.Update(self.telegram_manager)
 
-                elif action == "DOWNLOAD":
-                    self.command_manager.Download(command, self.telegram_manager)
 
                 elif action == "PHOTO" or action == "PIC" or action == "PICTURE":
                     self.command_manager.Take_Picture(self.command_manager, self.telegram_manager)
@@ -93,6 +85,15 @@ class PlantBot():
 
                 if action == "PRINT" and command[1] == "files":
                     self.command_manager.Print_Files(self.telegram_manager)
+
+                elif action == "DOWNLOAD":
+                    self.command_manager.Download(command, self.telegram_manager)
+
+                elif action == "DELETE":
+                    self.command_manager.Delete(command, self.telegram_manager)
+
+                elif action == "LENGTH":
+                    self.command_manager.File_Length(command, self.telegram_manager)
 
                 elif action == "VIDEO" and isinstance(command[1], int):
                     self.command_manager.Take_Video(command, self.camera_manager, self.telegram_manager)
