@@ -101,3 +101,9 @@ class Plant_Manager():
 
         else:
             return False
+
+
+
+def Generate_Plant_Manager(directory):
+    plant_manager = Plant_Manager(directory)
+    return plant_manager
