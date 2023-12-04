@@ -8,7 +8,7 @@ import os
 from time import sleep
 import subprocess
 
-class Camera_Manager_Class:
+class Camera_Manager:
 
     def __init__(self, rotation, imagecount, videocount, directory):
         self.rotation = rotation
@@ -91,6 +91,6 @@ def Generate_Camera_Manager(directory):
 
             os.mkdir(f"{directory}{modifier}")
 
-    Octavius_Camera_Manager = Camera_Manager_Class(180, counts[0], counts[1], directory)
+    Octavius_Camera_Manager = Camera_Manager(180, counts[0], counts[1], directory)
 
     return Octavius_Camera_Manager

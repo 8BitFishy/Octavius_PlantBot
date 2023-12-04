@@ -2,8 +2,11 @@ import Camera_Manager
 import RF_Manager
 import Telegram_Manager
 import Command_Manager
+import Plant_Manager
+
 from platform import system
-from time import ctime, sleep
+from time import sleep
+from datetime import datetime
 
 class InitialisationError(Exception):
     pass
@@ -15,6 +18,7 @@ class PlantBot():
         self.rf_manager = RF_Manager.Generate_RF_Manager(directory)
         self.camera_manager = Camera_Manager.Generate_Camera_Manager(directory)
         self.command_manager = Command_Manager.Generate_Command_Manager(directory)
+        self.plant_manager = Plant_Manager(directory)
 
 
     def life_sign(self):
@@ -27,6 +31,8 @@ class PlantBot():
             return False
         if plantbot.command_manager == None:
             return False
+        if plantbot.plant_manager == None:
+            return False
 
         return True
 
@@ -37,6 +43,8 @@ class PlantBot():
             text = self.telegram_manager.Get_Response()
             if text != "":
                 self.Interpret_Commands(text)
+
+
 
             sleep(2)
 
@@ -77,15 +85,8 @@ class PlantBot():
                 elif action == "DOWNLOAD":
                     self.command_manager.Download(command, self.telegram_manager)
 
-                elif action == "PHOTO" or action == "PIC":
-                    try:
-                        print(f"{ctime()} - Accessing camera to take picture")
-                        image_file = self.camera_manager.Take_Picture()
-                        self.telegram_manager.Send_Image(image_file)
-                        print(f"{ctime()} - Sending picture")
-
-                    except Exception as E:
-                        self.command_manager.Handle_Error(E, self.telegram_manager)
+                elif action == "PHOTO" or action == "PIC" or action == "PICTURE":
+                    self.command_manager.Take_Picture(self.command_manager, self.telegram_manager)
 
 
             elif len(command) == 2:
@@ -94,16 +95,12 @@ class PlantBot():
                     self.command_manager.Print_Files(self.telegram_manager)
 
                 elif action == "VIDEO" and isinstance(command[1], int):
+                    self.command_manager.Take_Video(command, self.camera_manager, self.telegram_manager)
 
-                    try:
-                        print(f"{ctime()} - Accessing camera to record {command[1]} second video")
-                        video_file, output = self.camera_manager.Take_Video(command[1])
-                        self.telegram_manager.Send_Video(video_file)
-                        print(f"{ctime()} - Sending video")
-
-                    except Exception as E:
+                elif action == "WATER" and isinstance(command[1], int):
+                    E = self.plant_manager.Water_On_Demand(self.rf_manager, self.telegram_manager, duration = int(command[1]))
+                    if E is not None:
                         self.command_manager.Handle_Error(E, self.telegram_manager)
-
 
             elif len(command) == 3:
 
@@ -111,30 +108,15 @@ class PlantBot():
                     self.command_manager.Print_File_Contents(command, self.telegram_manager)
 
                 elif command[2].lower() == "on" or command[2].lower() == "off":
-                    print(ctime() + f" - Action - {command[0].lower()} {command[1]} {command[2]}")
-                    self.telegram_manager.Send_Message(f"Turning plug {command[0].lower()} {command[1]} {command[2]}")
-                    result = self.rf_manager.Code_Picker(target=str(command[0]).lower(), plug=command[1], action=command[2].lower())
+                    self.command_manager.Send_RF_Code(command, self.telegram_manager, self.rf_manager)
 
-                    if result == 0:
-                        print(f"{ctime()} - Binary code transmitted")
-                        self.telegram_manager.Send_Message(f"Plug {command[0].lower()} {command[1]} turned {command[2]}")
-                    elif result == 1:
-                        print(f"{ctime()} - No binary codes available, could not transmit")
-                        self.telegram_manager.Send_Message(f"No binary codes found, please check files")
-                    elif result == 2:
-                        print(f"{ctime()} - Requested target not found")
-                        self.telegram_manager.Send_Message(f"Requested target not found")
-                    elif result == 3:
-                        print(f"{ctime()} - Unknown error")
-                        self.telegram_manager.Send_Message(f"Unknown error")
 
             else:
-                print(ctime() + " - No action - Command not recognised")
+                print(str(datetime.now()).split('.')[0] + " - No action - Command not recognised")
                 self.telegram_manager.Send_Message("Command not recognised")
 
         except Exception as E:
-            print(ctime() + " - No action - Command not recognised")
-            self.telegram_manager.Send_Message("Command not recognised")
+            self.command_manager.Handle_Error(E, self.telegram_manager)
 
 
 
@@ -147,8 +129,8 @@ if __name__ == '__main__':
     else:
         directory = __file__.rpartition("\\")[0] + "\\"
 
-    print(f"{ctime()} - Starting...")
-    print(f"{ctime()} - Initialising System")
+    print(f"{str(datetime.now()).split('.')[0]} - Starting...")
+    print(f"{str(datetime.now()).split('.')[0]} - Initialising System")
     life_sign = False
     success = False
     timeout = 0
@@ -164,12 +146,12 @@ if __name__ == '__main__':
                 raise InitialisationError
 
         except Exception as e:
-            print(f"{ctime()} - Error initialising Plantbot - {e.__class__.__name__}")
+            print(f"{str(datetime.now()).split('.')[0]} - Error initialising Plantbot - {e.__class__.__name__}")
             print(e)
-            print(f"{ctime()} - Re-trying in 10 seconds")
+            print(f"{str(datetime.now()).split('.')[0]} - Re-trying in 10 seconds")
             sleep(10)
 
-    print(f"{ctime()} - Initialisation Complete")
+    print(f"{str(datetime.now()).split('.')[0]} - Initialisation Complete")
 
     while not success:
         success = plantbot.telegram_manager.Send_Message("I am online...")

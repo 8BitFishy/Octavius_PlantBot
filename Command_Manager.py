@@ -1,4 +1,5 @@
-from time import sleep, ctime
+from time import sleep
+from datetime import datetime
 from os import listdir, system, remove
 from os.path import isfile, join
 
@@ -27,11 +28,11 @@ class Command_Manager():
 
 
     def Update(self, telegram_manager):
-        print(ctime() + " - Action - Update")
+        print(str(datetime.now()).split('.')[0] + " - Action - Update")
         telegram_manager.Send_Message(f"Updating files")
         success, E = self.Download_and_Remove_Files()
         if success:
-            print(ctime() + " - Update Complete")
+            print(str(datetime.now()).split('.')[0] + " - Update Complete")
             telegram_manager.Send_Message(f"Update complete, Rebooting")
             self.Reboot(telegram_manager)
 
@@ -43,7 +44,7 @@ class Command_Manager():
         filename = str(command[1])
 
         try:
-            print(ctime() + f" - Action - Download {filename}")
+            print(str(datetime.now()).split('.')[0] + f" - Action - Download {filename}")
             telegram_manager.Send_Message(f"Downloading {filename} from my repo")
             system(f"wget -P {self.directory} {self.git_repo}{filename}")
             telegram_manager.Send_Message(f"{filename} downloaded")
@@ -56,16 +57,16 @@ class Command_Manager():
 
     def Handle_Error(self, E, telegram_manager):
         telegram_manager.Send_Message("Action failed - " + E.__class__.__name__)
-        print(ctime() + " - failed with exception:")
+        print(str(datetime.now()).split('.')[0] + " - failed with exception:")
         print(E)
         return
 
 
     def Talk(self, telegram_manager):
         telegram_manager.Send_Message("I am active. My current commands are: ")
-        telegram_manager.Send_Message("On")
-        telegram_manager.Send_Message("Off")
-        telegram_manager.Send_Message("Hold")
+        telegram_manager.Send_Message("[Plug colour] [plug number] [on/off]")
+        telegram_manager.Send_Message("Pic / Photo")
+        telegram_manager.Send_Message("Video [length]")
         telegram_manager.Send_Message("Talk")
         telegram_manager.Send_Message("Reboot")
         telegram_manager.Send_Message("Update")
@@ -78,7 +79,7 @@ class Command_Manager():
 
 
     def Reboot(self, telegram_manager):
-        print(ctime() + " - Rebooting")
+        print(str(datetime.now()).split('.')[0] + " - Rebooting")
         telegram_manager.Send_Message("Rebooting")
         try:
             system("sudo reboot")
@@ -90,7 +91,7 @@ class Command_Manager():
     def Delete(self, command, telegram_manager):
         filename = str(command[1])
         if filename not in self.protected_files:
-            print(ctime() + " - Action - Deleting file: " + filename)
+            print(str(datetime.now()).split('.')[0] + " - Action - Deleting file: " + filename)
             telegram_manager.Send_Message(f"Deleting {filename}")
 
             try:
@@ -108,10 +109,10 @@ class Command_Manager():
 
     def Print_Files(self, telegram_manager):
 
-        print(ctime() + " - Action - Read file names")
+        print(str(datetime.now()).split('.')[0] + " - Action - Read file names")
 
         try:
-            print(ctime() + " - Searching directory: \n" + self.directory)
+            print(str(datetime.now()).split('.')[0] + " - Searching directory: \n" + self.directory)
             telegram_manager.Send_Message("Files found:")
 
             for f in listdir(self.directory):
@@ -128,7 +129,7 @@ class Command_Manager():
             count = sum(1 for _ in file)
             file.close()
         if count > 0:
-            print(ctime() + " - Action - Sending file: ")
+            print(str(datetime.now()).split('.')[0] + " - Action - Sending file: ")
             print(f'{self.directory}{filename}')
             telegram_manager.Send_Message(f"Accessing {filename}")
 
@@ -154,7 +155,7 @@ class Command_Manager():
 
     def File_Length(self, command, telegram_manager):
             filename = str(command[1])
-            print(ctime() + " - Action - Sending length of file: " + filename)
+            print(str(datetime.now()).split('.')[0] + " - Action - Sending length of file: " + filename)
             telegram_manager.Send_Message(f"Reading length of {filename}")
 
             try:
@@ -167,9 +168,58 @@ class Command_Manager():
                 self.Handle_Error(E, telegram_manager)
 
 
+    def Take_Picture(self, camera_manager, telegram_manager):
+        try:
+            print(f"{str(datetime.now()).split('.')[0]} - Accessing camera to take picture")
+            image_file = camera_manager.Take_Picture()
+            telegram_manager.Send_Image(image_file)
+            print(f"{str(datetime.now()).split('.')[0]} - Sending picture")
+            return True
+
+        except Exception as E:
+            self.Handle_Error(E, telegram_manager)
+            return False
 
 
 
+    def Take_Video(self, command, camera_manager, telegram_manager):
+        try:
+            print(f"{str(datetime.now()).split('.')[0]} - Accessing camera to record {command[1]} second video")
+            video_file, output = camera_manager.Take_Video(command[1])
+            telegram_manager.Send_Video(video_file)
+            print(f"{str(datetime.now()).split('.')[0]} - Sending video")
+            return True
+
+        except Exception as E:
+            self.Handle_Error(E, telegram_manager)
+            return False
+
+
+    def Send_RF_Code(self, command, telegram_manager, rf_manager):
+
+        print(str(datetime.now()).split('.')[0] + f" - Action - {command[0].lower()} {command[1]} {command[2]}")
+        telegram_manager.Send_Message(f"Turning plug {command[0].lower()} {command[1]} {command[2]}")
+        result = rf_manager.Code_Picker(target=str(command[0]).lower(), plug=command[1], action=command[2].lower())
+
+        if result == 0:
+            print(f"{str(datetime.now()).split('.')[0]} - Binary code transmitted")
+            telegram_manager.Send_Message(f"Plug {command[0].lower()} {command[1]} turned {command[2]}")
+            return True
+
+        elif result == 1:
+            print(f"{str(datetime.now()).split('.')[0]} - No binary codes available, could not transmit")
+            telegram_manager.Send_Message(f"No binary codes found, please check files")
+        elif result == 2:
+            print(f"{str(datetime.now()).split('.')[0]} - Requested target not found")
+            telegram_manager.Send_Message(f"Requested target not found")
+        elif result == 3:
+            print(f"{str(datetime.now()).split('.')[0]} - Failed to transmit code")
+            telegram_manager.Send_Message(f"Failed to transmit code")
+        elif result == 4:
+            print(f"{str(datetime.now()).split('.')[0]} - Unknown error")
+            telegram_manager.Send_Message(f"Unknown error")
+
+        return False
 
 
 def Generate_Command_Manager(directory):

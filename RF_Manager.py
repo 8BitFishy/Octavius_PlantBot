@@ -11,21 +11,21 @@ class RF_Manager:
 
 
     def Code_Picker(self, target, action, devicelist=None, plug=None):
-        print(f"Searching or codes")
-        print(target)
-        print(plug)
-        print(action)
+
         if len(self.binary_codes) == 0:
             return 1
 
         else:
-            if target == "black" or target == "white" and plug != None:
+            if target.lower() == "black" or target.lower() == "white" and plug != None:
                 colour = target
                 for i in range(len(self.binary_codes)):
                     if self.binary_codes[i][0] == colour and self.binary_codes[i][1] == plug and self.binary_codes[i][2] == action:
                         print(f"Binary code - {self.binary_codes[i][3]}")
-                        self.transmit_code(self.binary_codes[i][3])
-                        return 0
+                        try:
+                            self.transmit_code(self.binary_codes[i][3])
+                            return 0
+                        except:
+                            return 3
                 return 2
 
             elif target == 'all':
@@ -46,7 +46,7 @@ class RF_Manager:
                 return 0
 
 
-        return 3
+        return 4
 
 
     def transmit_code(self, binary_code):

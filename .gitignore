@@ -127,7 +127,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-/.idea
+.idea
+apis/
 
 # Spyder project settings
 .spyderproject

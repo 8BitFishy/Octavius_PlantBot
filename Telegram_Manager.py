@@ -1,7 +1,8 @@
 import json
 import requests
 import urllib
-from time import time, ctime, sleep
+from time import time, sleep
+from datetime import datetime
 
 
 
@@ -48,14 +49,14 @@ class Message_Receiver:
     def Send_Message(self, text):
 
         try:
-            print(ctime() + " - Sending Message - " + text)
+            print(str(datetime.now()).split(".")[0] + " - Sending Message - " + text)
             text = urllib.parse.quote_plus(text)
             send_url = self.URL + "sendMessage?text={}&chat_id={}".format(text, self.chatID)
             self.Get_URL(send_url)
             return True
 
         except Exception as e:
-            print(f"{ctime()} - Error reaching URL, cannot send message")
+            print(f"{str(datetime.now()).split('.')[0]} - Error reaching URL, cannot send message")
             print(e)
 
         return False
@@ -64,12 +65,12 @@ class Message_Receiver:
     def Send_Image(self, image_file):
         files = {'photo': open(image_file, 'rb')}
         try:
-            print(ctime() + " - Sending image - " + image_file)
+            print(str(datetime.now()).split('.')[0] + " - Sending image - " + image_file)
             status = requests.post(self.URL + "sendPhoto?chat_id=" + self.chatID, files=files)
             return True
 
         except Exception as e:
-            print(f"{ctime()} - Error sending image")
+            print(f"{str(datetime.now()).split('.')[0]} - Error sending image")
             print(e)
             self.Send_Message(f"Error sending message - {e.__class__.__name__}")
 
@@ -78,12 +79,12 @@ class Message_Receiver:
     def Send_Video(self, video_file):
         files = {'video': open(video_file, 'rb')}
         try:
-            print(ctime() + " - Sending video - " + video_file)
+            print(str(datetime.now()).split('.')[0] + " - Sending video - " + video_file)
             status = requests.post(self.URL + "sendVideo?chat_id=" + self.chatID, files=files)
             return True
 
         except Exception as e:
-            print(f"{ctime()} - Error sending video")
+            print(f"{str(datetime.now()).split('.')[0]} - Error sending video")
             print(e)
             self.Send_Message(f"Error sending message - {e.__class__.__name__}")
 
@@ -102,7 +103,7 @@ class Message_Receiver:
 
                     self.last_update_id = int(updates["result"][0]["update_id"])
 
-                    print(ctime() + " - Received Update")
+                    print(str(datetime.now()).split('.')[0] + " - Received Update")
                     # print(updates)
 
                     date_time = int(str(time()).split(".")[0])
@@ -111,10 +112,10 @@ class Message_Receiver:
 
                     if abs(time_since_message) < 20:
                         self.text = updates["result"][0]["message"]["text"]
-                        print(ctime() + ' - Update Text - "' + self.text + '"')
+                        print(str(datetime.now()).split('.')[0] + ' - Update Text - "' + self.text + '"')
 
                     else:
-                        print(ctime() + " - Message timed out")
+                        print(str(datetime.now()).split('.')[0] + " - Message timed out")
 
             return self.text
 
@@ -127,7 +128,7 @@ class Message_Receiver:
 
             except:
                 pass
-            print(f"{ctime()} - Error reaching URL, cannot get updates")
+            print(f"{str(datetime.now()).split('.')[0]} - Error reaching URL, cannot get updates")
             print(e)
             self.text = ''
             sleep(5)
