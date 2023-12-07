@@ -77,11 +77,11 @@ class Command_Manager():
         telegram_manager.Send_Message("Talk")
         telegram_manager.Send_Message("Reboot")
         telegram_manager.Send_Message("Update")
-        telegram_manager.Send_Message("Download (filename")
+        telegram_manager.Send_Message("Download [filename]")
         telegram_manager.Send_Message("Print files")
-        telegram_manager.Send_Message("Print (filename)")
-        telegram_manager.Send_Message("Length (filename)")
-        telegram_manager.Send_Message("Delete (filename)")
+        telegram_manager.Send_Message("Print [filename]")
+        telegram_manager.Send_Message("Length [filename]")
+        telegram_manager.Send_Message("Delete [filename]")
         return
 
 
