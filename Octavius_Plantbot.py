@@ -48,6 +48,7 @@ class PlantBot():
                 E = self.plant_manager.Water_Schedule(self.rf_manager, self.telegram_manager)
                 if E is not None:
                     self.command_manager.Handle_Error(E, self.telegram_manager)
+
             sleep(2)
 
 
@@ -100,7 +101,7 @@ class PlantBot():
                     self.command_manager.Take_Video(command, self.camera_manager, self.telegram_manager)
 
                 elif action == "WATER" and isinstance(command[1], int):
-                    E = self.plant_manager.Water_On_Demand(self.rf_manager, self.telegram_manager, duration = int(command[1]))
+                    E = self.plant_manager.Water_On_Demand(self.rf_manager, self.telegram_manager, duration=int(command[1]))
                     if E is not None:
                         self.command_manager.Handle_Error(E, self.telegram_manager)
 

@@ -72,6 +72,8 @@ class Command_Manager():
         telegram_manager.Send_Message("[Plug colour] [plug number] [on/off]")
         telegram_manager.Send_Message("Pic / Photo")
         telegram_manager.Send_Message("Video [length]")
+        telegram_manager.Send_Message('Water [duration]')
+        telegram_manager.Send_Message('Last water')
         telegram_manager.Send_Message("Talk")
         telegram_manager.Send_Message("Reboot")
         telegram_manager.Send_Message("Update")
@@ -175,6 +177,7 @@ class Command_Manager():
 
     def Take_Picture(self, camera_manager, telegram_manager):
         try:
+            telegram_manager.Send_Message('Taking picture')
             print(f"{str(datetime.now()).split('.')[0]} - Accessing camera to take picture")
             image_file = camera_manager.Take_Picture()
             telegram_manager.Send_Image(image_file)
@@ -189,6 +192,7 @@ class Command_Manager():
 
     def Take_Video(self, command, camera_manager, telegram_manager):
         try:
+            telegram_manager.Send_Message('Taking video')
             print(f"{str(datetime.now()).split('.')[0]} - Accessing camera to record {command[1]} second video")
             video_file, output = camera_manager.Take_Video(command[1])
             telegram_manager.Send_Video(video_file)
@@ -242,7 +246,6 @@ if __name__ == '__main__':
 
     if int(update) == 1:
         command_manager.Download_File(input("Enter the name of the file to download:\n"))
-
 
     elif int(update) == 2:
         command_manager.Download_and_Remove_Files()

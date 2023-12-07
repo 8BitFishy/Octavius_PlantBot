@@ -56,7 +56,7 @@ class Plant_Manager():
         success, E = self.Water_Plants(rf_manager, duration)
 
         if success:
-            print(f"{str(datetime.now()).split('.')[0]} - Scheduled plant watering cycle initiated")
+            print(f"{str(datetime.now()).split('.')[0]} - Manual plant watering cycle initiated")
             telegram_manager.Send_Message(f"Plant watering complete")
             return None
 
@@ -90,7 +90,8 @@ class Plant_Manager():
 
     def Update_Diary(self, duration):
         with open(f"{self.directory}{self.watering_diary}", "a") as file:
-            file.write(f"{str(datetime.now()).split('.')[0]} - {duration} seconds\n")
+            file.write(f"{str(datetime.now()).split('.')[0]} - {duration} seconds")
+            file.write()
             file.close()
         return
 
@@ -116,7 +117,7 @@ class Plant_Manager():
         return None
 
 
-    def Check_Date(self, current_date, last_water):
+    def Check_Date(self, last_water, current_date):
         if last_water is None:
             return True, 0
         else:
