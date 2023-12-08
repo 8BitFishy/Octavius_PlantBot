@@ -92,7 +92,7 @@ class Plant_Manager():
     def Update_Diary(self, duration):
         with open(f"{self.directory}{self.watering_diary}", "a") as file:
             file.write(f"{str(datetime.now()).split('.')[0]} - {duration} seconds")
-            file.write("")
+            file.write("\n")
             file.close()
         return
 
